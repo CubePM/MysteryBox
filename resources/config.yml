@@ -1,1 +1,43 @@
+---
+# Developed by TheAz928
+# MysteryBox configured file
 
+# Message title/prefix
+prefix: "[Mysterybox]"
+
+# Mystery Box text update time (in seconds)
+text.update: 3
+
+# Mystery box configuration
+boxes:
+    - name: "&6&lCommon Mystery Box"
+      box.id: common
+      key:
+          item: "tripwire_hook:1"
+          name: "&8[Key]&r Common"
+          lore:
+              - "&7Type: &acommon"
+              - "&7Source: &cunknown"
+              - " "
+              - "&fUsed to open &6&lCommon Mystery Box"
+      rgb:
+          - 255
+          - 255
+          - 255
+      items:
+          - item: "bread:0:10"
+            chance: 30
+          - item: "322:0:20"
+            chance: 20
+          - item: "466:0:1"
+            chance: 15
+          - item: "49:0:10"
+            chance: 40
+          - item: "iron_ingot:0:32"
+            chance: 80
+          - item: "gold_ingot:0:32"
+            chance: 60
+          - item: "bedrock:0:1"
+            chance: 1
+            
+...
