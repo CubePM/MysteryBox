@@ -18,7 +18,10 @@ Advanced and customisable crates plugin for your PocketMine-MP server.
 > ToDo...
 
 > Try /mb for now
+
+
 **Item Format**(For rewards)**:** "id or name:meta:count:none or custom name:enchant id:enchant level:enchant id:enchant level...
+
 
 **NOTE:** You can use '&' as color symbol also
 
