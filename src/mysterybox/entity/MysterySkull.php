@@ -50,7 +50,7 @@ class MysterySkull extends Entity{
 	protected $player;
         
 	/* @var float */
-	protected $max_y = 2;
+	protected $max_y = 4;
 	
 	/**
 	 * @param Player $player
