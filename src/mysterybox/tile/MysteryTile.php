@@ -141,7 +141,7 @@ class MysteryTile extends Spawnable{
 		$title = TF::colorize($box->getName()."\n&r&7You have &c{$this->getCore()->getMysteryKey($player, $this->mysteryId)}&7 keys virtually");
 		$ftp = new FloatingTextParticle($this->add(0.5, 2, 0.5), $title);
 			
-		$player->getLevel()->addParticle($ftp);
+		$player->getLevel()->addParticle($ftp, [$player]);
                         
 		$this->sessions[$player->getId()] = $ftp;
 	}
