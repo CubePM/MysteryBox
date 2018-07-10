@@ -1,0 +1,20 @@
+---
+name: MysteryBox
+version: 1.0.0
+api:
+- 3.0.0
+- 4.0.0
+author: TheAz928
+main: mysterybox\Core
+description: "Mystery Box for opening mysteries!"
+commands:
+  mysterybox:
+    aliases: ["mb", "mbx"]
+    permission: "mysterybox.command"
+    description: "Mystery Box administration command"
+
+permissions:
+  mysterybox.command:
+    default: op
+    description: "Allows to access /mysterybox command"
+...
