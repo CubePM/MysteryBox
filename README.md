@@ -37,4 +37,4 @@ If you have any issues with the plugin or want any features to be added, make an
 
 
 ## Plugin related information
-For more info about how to use the plugin go to the [WiKi Page](https://cubepm.github.io/projects/MysteryBox/).
+For more info about how to use the plugin go to the [WiKi Page](https://github.com/CubePM/MysteryBox/wiki).
