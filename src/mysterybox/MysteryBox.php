@@ -245,7 +245,7 @@ class MysteryBox{
 
 			$nbt = ItemEntity::createBaseNBT($tile->add(0.5, 3.5, 0.5), new Vector3(0, 0, 0));
 			$nbt->setShort("Health", 5);
-			$nbt->setShort("PickupDelay", 40000);
+			$nbt->setShort("PickupDelay", 800);
 			$nbt->setShort("Age", 5900);
 			$nbt->setTag($itemTag);
 			
