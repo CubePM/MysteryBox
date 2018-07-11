@@ -8,6 +8,9 @@ prefix: "[Mysterybox]"
 # Mystery Box text update time (in seconds)
 text.update: 3
 
+# Version, recommend to not change
+version: 1
+
 # Mystery box configuration
 boxes:
     - name: "&6&lCommon Mystery Box"
@@ -39,5 +42,34 @@ boxes:
             chance: 60
           - item: "bedrock:0:1"
             chance: 1
+    - name: "&b&lLoot Mystery Box"
+      box.id: loot
+      key:
+          item: "tripwire_hook:2"
+          name: "&8[Key]&r Loot"
+          lore:
+              - "&7Type: &bloot"
+              - "&7Source: &cunknown"
+              - " "
+              - "&fUsed to open &b&lLoot Mystery Box"
+      rgb:
+          - 255
+          - 220
+          - 100
+      items:
+          - item: "diamond:0:10"
+            chance: 80
+          - item: "466:0:20"
+            chance: 20
+          - item: "diamond_block:0:5"
+            chance: 15
+          - item: "49:0:64"
+            chance: 40
+          - item: "iron_block:0:32"
+            chance: 80
+          - item: "130:0:1"
+            chance: 10
+          - item: "bedrock:0:20"
+            chance: 5
             
 ...
