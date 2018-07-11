@@ -23,6 +23,10 @@ use pocketmine\Player;
 
 use pocketmine\item\Item;
 
+use pocketmine\math\Vector3;
+
+use pocketmine\entity\object\ItemEntity;
+
 use pocketmine\nbt\tag\ListTag;
 
 use pocketmine\utils\TextFormat as TF;
@@ -71,6 +75,11 @@ class MysteryBox{
 		$this->items = $data["items"];
 
 		$key = Item::fromString($data["key"]["item"]);
+		
+		$nbt = $key->getNamedTag();
+		$nbt->setTag(new ListTag("ench", []));
+		
+		$key->setNamedTag($nbt);
 		$key->setCustomName(TF::colorize($data["key"]["name"] ?? $this->name));
 		$key->setLore(array_map(function($i){ return TF::colorize($i); }, $data["key"]["lore"] ?? []));
 		
@@ -188,7 +197,7 @@ class MysteryBox{
 	
 	public function completeOpenSequence(Player $player, MysteryTile $tile) : void{
 		if($player->isOnline()){
-			$this->grantItem($player, mt_rand(1, 100));
+			$this->grantItem($player, $tile);
 		}
 		
 		$pk = new BlockEventPacket;
@@ -204,34 +213,49 @@ class MysteryBox{
 	
 	/**
 	 * @param Player $player
-	 * @param null|int $chance
+	 * @param MysteryTile $tile
 	 */
 	
-	public function grantItem(Player $player, ?int $chance = null) : void{
-		if($chance === null){
-			$chance = mt_rand(1, 100);
-		}
+	public function grantItem(Player $player, MysteryTile $tile) : void{
+		$chance = mt_rand(1, 100);
 		
-		$done = false;
 		$tries = 0;
 		
-		while($done == false and $tries < 40){
+		$possible = [];
+		
+		while(count($possible) === 0 and $tries < 100){
 			$tries++;
-			$data = $this->items[array_rand($this->items)];
-                        
-			if($chance <= $data["chance"]){
-				$done = true;
-				$item = Core::itemFromString($data["item"]);
-				break;
-			}
 			
-			if($tries % 10 == 0){
+			foreach($this->items as $data){
+				if($chance <= $data["chance"]){
+					$possible[] = Core::itemFromString(str_replace("\n", "\n", $data["item"]));
+					break;
+				}
+			}
+			if($tries % 5 == 0){
 				$chance = mt_rand(1, 100);
 			}
 		}
 		
-		if($done){
-			$player->addTitle(TF::colorize("&bYou've won"), $item->getCount()." × ".$item->getName(), 20, 10, 40);
+		if(empty($possible) == false){
+			$item = $possible[array_rand($possible)];
+			
+			$itemTag = $item->nbtSerialize();
+			$itemTag->setName("Item");
+
+			$nbt = ItemEntity::createBaseNBT($tile->add(0.5, 3.5, 0.5), new Vector3(0, 0, 0));
+			$nbt->setShort("Health", 5);
+			$nbt->setShort("PickupDelay", PHP_INT_MAX);
+			$nbt->setShort("Age", 5900);
+			$nbt->setTag($itemTag);
+			
+			$ie = new ItemEntity($tile->getLevel(), $nbt);
+			if($ie instanceof ItemEntity){
+				$ie->setNamedTag($item->getName());
+				$ie->setNameTagVisible(true);
+				$ie->spawnToAll();
+			}
+			
 			$player->getInventory()->addItem($item);
 		}
 	}
