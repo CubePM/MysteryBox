@@ -20,7 +20,7 @@ An advanced PocketMine-MP plugin to implement crates on your server.
 > • And many many more!
 
 ## License
-| License |
+| GNU General Public License v3.0 and later |
 | :---: |
 
 ## Information
