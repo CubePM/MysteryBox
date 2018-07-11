@@ -40,7 +40,7 @@ use mysterybox\tile\MysteryTile;
 
 class Core extends PluginBase{
 	
-	public const config_ver = "1";
+	public const config_ver = 1;
 	
 	/** @var self */
 	private static $instance;
