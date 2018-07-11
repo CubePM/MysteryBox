@@ -251,7 +251,7 @@ class MysteryBox{
 			
 			$ie = new ItemEntity($tile->getLevel(), $nbt);
 			if($ie instanceof ItemEntity){
-				$ie->setNamedTag($item->getName());
+				$ie->setNameTag($item->getName());
 				$ie->setNameTagVisible(true);
 				$ie->spawnToAll();
 			}
