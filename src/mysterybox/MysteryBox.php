@@ -23,10 +23,6 @@ use pocketmine\Player;
 
 use pocketmine\item\Item;
 
-use pocketmine\math\Vector3;
-
-use pocketmine\entity\object\ItemEntity;
-
 use pocketmine\nbt\tag\ListTag;
 
 use pocketmine\utils\TextFormat as TF;
@@ -175,48 +171,37 @@ class MysteryBox{
 		}
 		
 		if($consumed){
-			$pk = new BlockEventPacket;
-			$pk->x = (int) $tile->x;
-			$pk->y = (int) $tile->y;
-			$pk->z = (int) $tile->z;
-			$pk->eventType = 1;
-			$pk->eventData = 1;
-			
-			$tile->getLevel()->addChunkPacket($tile->x >> 4, $tile->z >> 4, $pk);
+			$this->displayAnimation($tile, true);
 			$tile->in_use = true;
 			
-			$entity = new MysterySkull($player, $tile, [$this, "completeOpenSequence"]);
+			$entity = new MysterySkull($player, $tile, $this);
 			$entity->spawnToAll();
 		}
 	}
 	
 	/**
-	 * @param Player $player
 	 * @param MysteryTile $tile
+	 * @param bool $open
 	 */
 	
-	public function completeOpenSequence(Player $player, MysteryTile $tile) : void{
-		if($player->isOnline()){
-			$this->grantItem($player, $tile);
-		}
-		
+	public function displayAnimation(MysteryTile $tile, bool $open) : void{
 		$pk = new BlockEventPacket;
 		$pk->x = (int) $tile->x;
 		$pk->y = (int) $tile->y;
 		$pk->z = (int) $tile->z;
 		$pk->eventType = 1;
-		$pk->eventData = 0;
+		$pk->eventData = $open ? 1 : 0;
 			
 		$tile->getLevel()->addChunkPacket($tile->x >> 4, $tile->z >> 4, $pk);
-		$tile->in_use = false;
 	}
 	
 	/**
 	 * @param Player $player
-	 * @param MysteryTile $tile
+	 *
+	 * @return Item
 	 */
 	
-	public function grantItem(Player $player, MysteryTile $tile) : void{
+	public function grantItem(Player $player) : Item{
 		$chance = mt_rand(1, 100);
 		
 		$tries = 0;
@@ -239,24 +224,9 @@ class MysteryBox{
 		
 		if(empty($possible) == false){
 			$item = $possible[array_rand($possible)];
-			
-			$itemTag = $item->nbtSerialize();
-			$itemTag->setName("Item");
-
-			$nbt = ItemEntity::createBaseNBT($tile->add(0.5, 3.5, 0.5), new Vector3(0, 0, 0));
-			$nbt->setShort("Health", 5);
-			$nbt->setShort("PickupDelay", 800);
-			$nbt->setShort("Age", 5900);
-			$nbt->setTag($itemTag);
-			
-			$ie = new ItemEntity($tile->getLevel(), $nbt);
-			if($ie instanceof ItemEntity){
-				$ie->setNameTag($item->getName());
-				$ie->setNameTagVisible(true);
-				$ie->spawnToAll();
-			}
-			
 			$player->getInventory()->addItem($item);
 		}
+		
+		return $item ?? Item::get(Item::AIR);
 	}
 }
