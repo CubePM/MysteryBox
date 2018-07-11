@@ -4,19 +4,20 @@ An advanced PocketMine-MP plugin to implement crates on your server.
 
 ## Features
 
-• > Support for creating own crates (limit: ∞)
+> • Support for creating own crates (limit: ∞)
 
-• > Support for item chances and custom name, enchantments, custom enchantments
+> • Support for item chances and custom name, enchantments, custom enchantments
 
-• > Support for changing crate particle colors
+> • Support for changing crate particle colors
 
-• > Smooth animations while idle and on crate opening
+> • Smooth animations while idle and on crate opening
 
-• > Support for both virtual and physical keys
+> • Support for both virtual and physical keys
 
-• > Customisable floating text update time (might be removed in future updates)
 
-• > And many many more!
+> • CustomisableCustomisable floating text update time (might be removed in future updates)
+
+> • And many many more!
 
 ## License
 | License |
