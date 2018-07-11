@@ -1,29 +1,35 @@
-# MysteryBox
-Advanced and customisable crates plugin for your PocketMine-MP server.
+# Mystery Box
+
+An advanced PocketMine-MP plugin to implement crates on your server.
 
 ## Features
-> Support for creating unlimited crates
 
-> Customisable crate drop chances and items
+• > Support for creating own crates (limit: ∞)
 
-> Support for adding enchantments and custom enchabtments to reward items
+• > Support for item chances and custom name, enchantments, custom enchantments
 
-> Support for both keys and virtual keys
+• > Support for changing crate particle colors
 
-> Cool animated display
+• > Smooth animations while idle and on crate opening
 
-> and many more!
+• > Support for both virtual and physical keys
 
-## WiKi
-> ToDo...
+• > Customisable floating text update time (might be removed in future updates)
 
-> Try /mb for now
+• > And many many more!
+
+## License
+| License |
+| :---: |
+
+## Information
+| Download | View Count | Discord |
+| :---: | :---: | :---: |
+ <a href="https://poggit.pmmp.io/p/MysteryBox"><img src="https://githubusercontent.com/CubePM/MysteryBox/master/resources/img.png"></a> | [![View Count](http://hits.dwyl.io/CubePM/MysteryBox.svg)](http://hits.dwyl.io/CubePM/MysteryBox) | <a href="https://discord.gg/KnTerS"><img src="https://discordapp.com/api/guilds/425712766687510528/embed.png" alt="Discord server"/></a> |
 
 
-**Item Format**(For rewards)**:** "id or name:meta:count:none or custom name:enchant id:enchant level:enchant id:enchant level...
+If you have any issues with the plugin or want any features to be added, make an issue [here](https://github.com/CubePM/MysteryBox/issues/new).
+* Copyright (C): [TheAz928](https://github.com/TheAz928)
 
-
-**NOTE:** You can use '&' as color symbol also
-
-## Contact Me
-Twitter: **@TheAz928**
+## Plugin related information
+For more info about how to use the plugin go to the [WiKi Page](https://cubepm.github.io/projects/MysteryBox/).
