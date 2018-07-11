@@ -40,6 +40,8 @@ use mysterybox\tile\MysteryTile;
 
 class Core extends PluginBase{
 	
+	public const config_ver = "1";
+	
 	/** @var self */
 	private static $instance;
 	
@@ -70,6 +72,14 @@ class Core extends PluginBase{
 		$this->getLogger()->info(TF::colorize("&7Loading Mystery Boxes from config..."));
 		
 		$this->saveDefaultConfig();
+		
+		if($this->getConfig()->get("version", null) !== self::config_ver){
+			$this->getLogger()->info(TF::colorize("&cConfig version seems to be incompatible with this version, resetting..."));
+			$this->getLogger()->info(TF::colorize("&7If you've a config backup, update your backup with this version before mounting"));
+			
+			$this->saveResource("config.yml", true);
+			$this->getConfig()->reload();
+		}
 		
 		foreach($this->getConfig()->get("boxes", []) as $key => $data){
 			try{
@@ -370,8 +380,12 @@ class Core extends PluginBase{
 				break;
 			}
 			case "create": {
+				if($sender instanceof Player == false){
+					$sender->sendMessage(TF::colorize($this->getConfig()->get("prefix")." &r&7/mysterybox create can only be ran in-game!"));
+					break;
+				}
 				if(isset($args[1]) == false){
-					$sender->sendMessage(TF::colorize($this->getConfig()->get("prefix")." &r&7/mysterybox create &c[name]"));
+					$sender->sendMessage(TF::colorize($this->getConfig()->get("prefix")." &r&7/mysterybox create &c[box id]"));
 					break;
 				}
 				if($this->getMysteryBox($args[1]) == null){
