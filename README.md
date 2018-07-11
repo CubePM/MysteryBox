@@ -24,13 +24,17 @@ An advanced PocketMine-MP plugin to implement crates on your server.
 | :---: |
 
 ## Information
-| Download | View Count | Discord |
-| :---: | :---: | :---: |
- <a href="https://poggit.pmmp.io/ci/CubePM/MysteryBox/MysteryBox"></a> | [![View Count](http://hits.dwyl.io/CubePM/MysteryBox.svg)](http://hits.dwyl.io/CubePM/MysteryBox) | <a href="https://discord.gg/KnTerS"><img src="https://discordapp.com/api/guilds/425712766687510528/embed.png" alt="Discord server"/></a> |
+| View Count | Discord |
+| :---: | :---: |
+[![View Count](http://hits.dwyl.io/CubePM/MysteryBox.svg)](http://hits.dwyl.io/CubePM/MysteryBox) | <a href="https://discord.gg/KnTerS"><img src="https://discordapp.com/api/guilds/425712766687510528/embed.png" alt="Discord server"/></a> |
 
 
 If you have any issues with the plugin or want any features to be added, make an issue [here](https://github.com/CubePM/MysteryBox/issues/new).
-* Copyright (C): [TheAz928](https://github.com/TheAz928)
+
+
+### Copyright (C): [TheAz928](https://github.com/TheAz928)
+### Download: [***MysteryBox***](https://poggit.pmmp.io/ci/CubePM/MysteryBox/MysteryBox)
+
 
 ## Plugin related information
 For more info about how to use the plugin go to the [WiKi Page](https://cubepm.github.io/projects/MysteryBox/).
