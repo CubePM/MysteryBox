@@ -26,6 +26,8 @@ use pocketmine\entity\Entity;
 use pocketmine\level\particle\LavaParticle;
 use pocketmine\level\particle\HugeExplodeSeedParticle;
 
+use pocketmine\level\sound\FizzSound;
+
 use pocketmine\network\mcpe\protocol\LevelSoundEventPacket;
 
 use mysterybox\tile\MysteryTile;
@@ -87,12 +89,14 @@ class MysterySkull extends Entity{
 			$this->flagForDespawn();
 			return true;
 		}
+		
+		$this->getLevel()->addSound(new FizzSound($this->asVector3()));
 
-		$this->getLevel()->addParticle(new LavaParticle($this->asVector3()));
-		       
 		if($this->max_y > 0){
 			$this->motion->y = 0.05;
 			$this->max_y -= 0.1;
+			
+			$this->getLevel()->addParticle(new LavaParticle($this->asVector3()));
 		}else{
 			if($this->motion->y > 0){
 				$this->motion->y = 0;
@@ -110,6 +114,7 @@ class MysterySkull extends Entity{
 			$callable($this->player, $this->tile);
 			
 			$this->getLevel()->addParticle(new HugeExplodeSeedParticle($this->asVector3()));
+			
 			$this->getLevel()->broadcastLevelSoundEvent($this->asVector3(), LevelSoundEventPacket::SOUND_TWINKLE);
 			
 			$this->flagForDespawn();
