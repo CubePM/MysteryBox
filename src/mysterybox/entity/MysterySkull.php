@@ -23,14 +23,19 @@ use pocketmine\Player;
 
 use pocketmine\entity\Entity;
 
+use pocketmine\math\Vector3;
+
 use pocketmine\level\particle\LavaParticle;
 use pocketmine\level\particle\HugeExplodeSeedParticle;
+use pocketmine\level\particle\FloatingTextParticle;
 
 use pocketmine\level\sound\FizzSound;
 
 use pocketmine\network\mcpe\protocol\LevelSoundEventPacket;
 
 use mysterybox\tile\MysteryTile;
+
+use mysterybox\MysteryBox;
 
 class MysterySkull extends Entity{
 	
@@ -45,8 +50,8 @@ class MysterySkull extends Entity{
 	/** @var MysteryTile */
 	protected $tile;
 	
-	/** @var callable */
-	protected $callable;
+	/** @var MysteryBox */
+	protected $mysterybox;
 	
 	/** @var Player */
 	protected $player;
@@ -54,15 +59,24 @@ class MysterySkull extends Entity{
 	/* @var float */
 	protected $max_y = 5;
 	
+	/** @var int */
+	protected $stay_time = 0;
+	
+	/** @var FloatingTextParticle */
+	protected $ftp;
+	
+	/** @var ItemEntity */
+	protected $itemEntity;
+	
 	/**
 	 * @param Player $player
 	 * @param MysteryTile $tile
-	 * @param callable $callable
+	 * @param MysteryBox $mysterybox
 	 */
 	
-	public function __construct(Player $player, MysteryTile $tile, callable $callable){
+	public function __construct(Player $player, MysteryTile $tile, MysteryBox $mysterybox){
 		$this->tile = $tile;
-		$this->callable = $callable;
+		$this->mysterybox = $mysterybox;
 		$this->player = $player;
 		
 		parent::__construct($tile->getLevel(), self::createBaseNBT($tile->asVector3()->add(0.5, 0, 0.5)));
@@ -91,8 +105,8 @@ class MysterySkull extends Entity{
 		}
 		
 		$this->getLevel()->addSound(new FizzSound($this->asVector3()));
-
-		if($this->max_y > 0){
+		
+		if($this->max_y > 0 and $this->stay_time == 0){
 			$this->motion->y = 0.05;
 			$this->max_y -= 0.1;
 			
@@ -101,25 +115,48 @@ class MysterySkull extends Entity{
 			if($this->motion->y > 0){
 				$this->motion->y = 0;
 			}
+			
+			$this->stay_time++;
+		}
+		
+		if($this->stay_time >= 60){
+			$this->motion->y = -0.05;
+			$this->max_y  += 0.1;
+			
+			if($this->max_y == 5){
+				$this->flagForDespawn();
+				$this->mysterybox->displayAnimation($this->tile, false);
+				
+				$this->ftp->setInvisible(true);
+				$this->itemEntity->flagForDespawn();
+				
+				foreach($this->ftp->encode() as $pk){
+					$this->getLevel()->addChunkPacket($this->x >> 4, $this->z >> 4, $pk);
+				}
+				
+				$this->tile->in_use = false;
+			}
+		}elseif($this->stay_time == 1){
+			$item = $this->mysterybox->grantItem($this->player);
+			
+			$this->getLevel()->addParticle(new HugeExplodeSeedParticle($this->asVector3()));
+			
+			$this->getLevel()->broadcastLevelSoundEvent($this->asVector3(), LevelSoundEventPacket::SOUND_TWINKLE);
+		
+			$this->ftp = new FloatingTextParticle($this->tile->add(0.5, 1, 0.5), $item->getName()."§r × ".$item->getCount());
+			
+			$this->getLevel()->addParticle($this->ftp);
+			$this->getLevel()->broadcastLevelSoundEvent($this->asVector3(), LevelSoundEventPacket::SOUND_PORTAL_TRAVEL);
+			
+			$this->itemEntity = $this->getLevel()->dropItem($this->ftp->asVector3(), $item, new Vector3(0, 0, 0), 8000);
 		}
 		
 		if($this->yaw > 360){
 			$this->yaw = 0;
 		}else{
-			$this->yaw += 20;
+			$this->yaw += 15;
 		}
-                
-		if($this->age >= 20 * 10){
-			$callable = $this->callable;
-			$callable($this->player, $this->tile);
-			
-			$this->getLevel()->addParticle(new HugeExplodeSeedParticle($this->asVector3()));
-			
-			$this->getLevel()->broadcastLevelSoundEvent($this->asVector3(), LevelSoundEventPacket::SOUND_TWINKLE);
-			
-			$this->flagForDespawn();
-		}
-
+      
 		return $return;
 	}
 	
