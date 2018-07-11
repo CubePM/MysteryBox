@@ -50,7 +50,7 @@ class MysterySkull extends Entity{
 	protected $player;
         
 	/* @var float */
-	protected $max_y = 4;
+	protected $max_y = 5;
 	
 	/**
 	 * @param Player $player
@@ -83,6 +83,11 @@ class MysterySkull extends Entity{
 	public function entityBaseTick(int $diff = 1) : bool{
 		$return = parent:: entityBaseTick($diff);
 		
+		if($this->tile === null or $this->tile->isClosed() or $this->player === null){
+			$this->flagForDespawn();
+			return true;
+		}
+
 		$this->getLevel()->addParticle(new LavaParticle($this->asVector3()));
 		       
 		if($this->max_y > 0){
@@ -97,10 +102,10 @@ class MysterySkull extends Entity{
 		if($this->yaw > 360){
 			$this->yaw = 0;
 		}else{
-			$this->yaw += 10;
+			$this->yaw += 20;
 		}
                 
-		if($this->age >= 20 * 5){
+		if($this->age >= 20 * 10){
 			$callable = $this->callable;
 			$callable($this->player, $this->tile);
 			
@@ -111,5 +116,13 @@ class MysterySkull extends Entity{
 		}
 
 		return $return;
+	}
+	
+	/**
+	 * @return bool
+	 */
+	
+	public function canSaveWithChunk() : bool{
+		return false;
 	}
 }
