@@ -1,0 +1,7 @@
+--- # Poggit-CI Manifest. Open the CI at https://poggit.pmmp.io/ci/CubePM/MysteryBox
+branches:
+- master
+projects:
+  MysteryBox:
+    path: ""
+...
