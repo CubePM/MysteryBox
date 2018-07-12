@@ -1,6 +1,6 @@
 ---
 # Developed by TheAz928
-# MysteryBox configured file
+# MysteryBox configuration file
 
 # Message title/prefix
 prefix: "[Mysterybox]"
@@ -24,9 +24,9 @@ boxes:
               - " "
               - "&fUsed to open &6&lCommon Mystery Box"
       rgb:
-          - 255
-          - 255
-          - 255
+          R: 255
+          G: 255
+          B: 255
       items:
           - item: "bread:0:10"
             chance: 30
@@ -41,8 +41,8 @@ boxes:
           - item: "gold_ingot:0:32"
             chance: 60
           - item: "bedrock:0:1"
-            chance: 1
-    - name: "&b&lLoot Mystery Box"
+            chance: 5
+    - name: "&b&lMystery Loot Box"
       box.id: loot
       key:
           item: "tripwire_hook:2"
@@ -51,11 +51,11 @@ boxes:
               - "&7Type: &bloot"
               - "&7Source: &cunknown"
               - " "
-              - "&fUsed to open &b&lLoot Mystery Box"
+              - "&fUsed to open &b&lMystery Loot Box"
       rgb:
-          - 255
-          - 220
-          - 100
+          R: 255
+          G: 200
+          B: 200
       items:
           - item: "diamond:0:10"
             chance: 80
@@ -67,9 +67,11 @@ boxes:
             chance: 40
           - item: "iron_block:0:32"
             chance: 80
-          - item: "130:0:1"
-            chance: 10
+          - item: "wheat:0:64"
+            chance: 50
+          - item: "diamond_block:0:64"
+            chance: 5
           - item: "bedrock:0:20"
             chance: 5
-            
+
 ...
