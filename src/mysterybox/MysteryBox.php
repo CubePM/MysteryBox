@@ -63,7 +63,7 @@ class MysteryBox{
 		if(count($data["rgb"]) !== 3){
 			throw new \Exception("RGB must contain 3 numbers");
 		}
-		$this->rgb = $data["rgb"];
+		$this->rgb = array_keys($data["rgb"]);
 		
 		if(empty($data["items"])){
 			throw new \Exception("Mystery Box must have atleast one item as reward");
