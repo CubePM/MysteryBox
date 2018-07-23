@@ -202,28 +202,20 @@ class MysteryBox{
 	 */
 	
 	public function grantItem(Player $player) : Item{
-		$chance = mt_rand(1, 100);
-		
 		$tries = 0;
+		$item = null;
 		
-		$possible = [];
-		
-		while(count($possible) === 0 and $tries < 100){
+		while($tries < 100 and $item == null){
 			$tries++;
 			
-			foreach($this->items as $data){
-				if($chance <= $data["chance"]){
-					$possible[] = Core::itemFromString(str_replace("\n", "\n", $data["item"]));
-					break;
-				}
-			}
-			if($tries % 5 == 0){
-				$chance = mt_rand(1, 100);
+			$d = $this->items[array_rand($this->items)];
+			
+			if(mt_rand(1, 99) <= $d["chance"]){
+				$item = Core::itemFromString(str_replace("\n", "\n", $d["item"]));
 			}
 		}
 		
-		if(empty($possible) == false){
-			$item = $possible[array_rand($possible)];
+		if($item !== null){
 			$player->getInventory()->addItem($item);
 		}
 		
