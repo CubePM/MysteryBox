@@ -128,7 +128,9 @@ class MysterySkull extends Entity{
 				$this->mysterybox->displayAnimation($this->tile, false);
 				
 				$this->ftp->setInvisible(true);
-				$this->itemEntity->flagForDespawn();
+				if($this->itemEntity !== null){
+					$this->itemEntity->flagForDespawn();
+				}
 				
 				foreach($this->ftp->encode() as $pk){
 					$this->getLevel()->addChunkPacket($this->x >> 4, $this->z >> 4, $pk);
