@@ -15,9 +15,9 @@ An advanced PocketMine-MP plugin to implement crates on your server.
 > • Support for both virtual and physical keys
 
 
-> • CustomisableCustomisable floating text update time (might be removed in future updates)
+> • Customisable floating text update time (might be removed in future updates)
 
-> • And many many more!
+> • And many many more to come!
 
 ## License
 | GNU General Public License v3.0 and later |
