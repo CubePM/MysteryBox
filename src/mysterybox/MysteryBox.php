@@ -198,12 +198,13 @@ class MysteryBox{
 	/**
 	 * @param Player $player
 	 *
-	 * @return Item
+	 * @return array
 	 */
 	
-	public function grantItem(Player $player) : Item{
+	public function grantItem(Player $player) : array{
 		$tries = 0;
-		$item = null;
+		$item = Item::get(Item::AIR);
+		$display = "Failed to select item - chances don't match";
 		
 		while($tries < 100 and $item == null){
 			$tries++;
@@ -212,13 +213,19 @@ class MysteryBox{
 			
 			if(mt_rand(1, 99) <= $d["chance"]){
 				$item = Core::itemFromString(str_replace("\n", "\n", $d["item"]));
+				
+				if($item->isNull() == false){
+					$display = TF::colorize($d["display"] ?? "&7".$item->getName()." &r&7× ".$item->getCount());
+				}else{
+					$display = "Failed to grant item, invalid item format";
+				}
 			}
 		}
 		
-		if($item !== null){
+		if($item->isNull() == false){
 			$player->getInventory()->addItem($item);
 		}
 		
-		return $item ?? Item::get(Item::AIR);
+		return [$item, $display];
 	}
 }
