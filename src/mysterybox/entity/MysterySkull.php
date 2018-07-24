@@ -139,18 +139,16 @@ class MysterySkull extends Entity{
 				$this->tile->in_use = false;
 			}
 		}elseif($this->stay_time == 1){
-			$item = $this->mysterybox->grantItem($this->player);
+			$data = $this->mysterybox->grantItem($this->player);
 			
 			$this->getLevel()->addParticle(new HugeExplodeSeedParticle($this->asVector3()));
 			
-			$this->getLevel()->broadcastLevelSoundEvent($this->asVector3(), LevelSoundEventPacket::SOUND_TWINKLE);
-		
-			$this->ftp = new FloatingTextParticle($this->tile->add(0.5, 1, 0.5), $item->getName()."§r × ".$item->getCount());
+			$this->ftp = new FloatingTextParticle($this->tile->add(0.5, 1, 0.5), $data[1]);
 			
 			$this->getLevel()->addParticle($this->ftp);
 			$this->getLevel()->broadcastLevelSoundEvent($this->asVector3(), LevelSoundEventPacket::SOUND_PORTAL_TRAVEL);
 			
-			$this->itemEntity = $this->getLevel()->dropItem($this->ftp->asVector3(), $item, new Vector3(0, 0, 0), 8000);
+			$this->itemEntity = $this->getLevel()->dropItem($this->ftp->asVector3(), $data[0], new Vector3(0, 0, 0), 8000);
 		}
 		
 		if($this->yaw > 360){
