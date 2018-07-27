@@ -156,10 +156,10 @@ class Core extends PluginBase{
 	 */
 	
 	public function addMysteryKey(IPlayer $player, string $id, int $amount = 1) : void{
-		$data = $this->getDataBase()->get($player->getLowercaseName(), []);
+		$data = $this->getDataBase()->get(strtolower($player->getName()), []);
 		$data[$id] = ($data[$id] ?? 0) + $amount;
 		
-		$this->getDataBase()->set($player->getLowercaseName(), $data);
+		$this->getDataBase()->set(strtolower($player->getName()), $data);
 	}
 	
 	/**
@@ -169,10 +169,10 @@ class Core extends PluginBase{
 	 */
 	
 	public function removeMysteryKey(IPlayer $player, string $id, int $amount = 1) : void{
-		$data = $this->getDataBase()->get($player->getLowercaseName(), []);
+		$data = $this->getDataBase()->get(strtolower($player->getName()), []);
 		$data[$id] = ($data[$id] ?? 0) - $amount;
 		
-		$this->getDataBase()->set($player->getLowercaseName(), $data);      
+		$this->getDataBase()->set(strtolower($player->getName()), $data);      
 	}
 	
 	/**
@@ -182,10 +182,10 @@ class Core extends PluginBase{
 	 */
 	
 	public function setMysteryKey(IPlayer $player, string $id, int $amount = 1) : void{
-		$data = $this->getDataBase()->get($player->getLowercaseName(), []);
+		$data = $this->getDataBase()->get(strtolower($player->getName()), []);
 		$data[$id] = $amount;
 		
-		$this->getDataBase()->set($player->getLowercaseName(), $data);
+		$this->getDataBase()->set(strtolower($player->getName()), $data);
 	}
 	
 	
