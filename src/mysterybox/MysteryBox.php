@@ -204,9 +204,9 @@ class MysteryBox{
 	public function grantItem(Player $player) : array{
 		$tries = 0;
 		$item = Item::get(Item::AIR);
-		$display = "";
+		$display = "Failed to select item - chances doesn't match";
 		
-		while($tries < 100 and $item->isNull() == false){
+		while($tries < 100 and $item->isNull()){
 			$tries++;
 			
 			$d = $this->items[array_rand($this->items)];
