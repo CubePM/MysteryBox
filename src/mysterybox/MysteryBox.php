@@ -215,7 +215,7 @@ class MysteryBox{
 				$item = Core::itemFromString(str_replace("\n", "\n", $d["item"]));
 				
 				if($item->isNull() == false){
-					$display = TF::colorize($d["display"] ?? "&7".$item->getName()." &r&7× ".$item->getCount());
+					$display = TF::colorize(str_replace("\n", "\n", $d["display"] ?? "&7".$item->getName()." &r&7× ".$item->getCount()));
 				}else{
 					$display = "Failed to grant item, invalid item format";
 				}
