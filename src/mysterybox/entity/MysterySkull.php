@@ -29,6 +29,8 @@ use pocketmine\level\particle\LavaParticle;
 use pocketmine\level\particle\HugeExplodeSeedParticle;
 use pocketmine\level\particle\FloatingTextParticle;
 
+use pocketmine\event\entity\EntityDamageEvent;
+
 use pocketmine\level\sound\FizzSound;
 
 use pocketmine\network\mcpe\protocol\LevelSoundEventPacket;
@@ -91,6 +93,15 @@ class MysterySkull extends Entity{
 	}
 	
 	/**
+	 * @param EntityDamageEvent $source
+	 */
+	
+	public function attack(EntityDamageEvent $source) : void{
+		$source->setCancelled();
+		
+	}
+	
+	/**
 	 * @param int $diff
 	 *
 	 * @return bool
@@ -99,8 +110,23 @@ class MysterySkull extends Entity{
 	public function entityBaseTick(int $diff = 1) : bool{
 		$return = parent:: entityBaseTick($diff);
 		
-		if($this->tile === null or $this->tile->isClosed() or $this->player === null){
+		if($this->tile === null or $this->tile->isClosed() or $this->player === null or $this->player->isOnline() == false){
 			$this->flagForDespawn();
+			
+			if($this->tile !== null and $this->tile->isClosed() == false){
+				$this->tile->in_use = false;
+			}
+			if($this->itemEntity !== null){
+				$this->itemEntity->flagForDespawn();
+			}
+			if($this->ftp !== null){
+				$this->ftp->setInvisible(true);
+				
+				foreach($this->ftp->encode() as $pk){
+					$this->getLevel()->addChunkPacket($this->x >> 4, $this->z >> 4, $pk);
+				}
+			}
+			
 			return true;
 		}
 		
