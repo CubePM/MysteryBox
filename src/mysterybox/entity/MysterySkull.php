@@ -34,6 +34,8 @@ use pocketmine\event\entity\EntityDamageEvent;
 use pocketmine\level\sound\FizzSound;
 
 use pocketmine\network\mcpe\protocol\LevelSoundEventPacket;
+use pocketmine\network\mcpe\protocol\AddItemEntityPacket;
+use pocketmine\network\mcpe\protocol\RemoveEntityPacket;
 
 use mysterybox\tile\MysteryTile;
 
@@ -67,8 +69,8 @@ class MysterySkull extends Entity{
 	/** @var FloatingTextParticle */
 	protected $ftp;
 	
-	/** @var ItemEntity */
-	protected $itemEntity;
+	/** @var int */
+	protected $item_eid = -1;
 	
 	/**
 	 * @param Player $player
@@ -110,15 +112,20 @@ class MysterySkull extends Entity{
 	public function entityBaseTick(int $diff = 1) : bool{
 		$return = parent:: entityBaseTick($diff);
 		
-		if($this->tile === null or $this->tile->isClosed() or $this->player === null or $this->player->isOnline() == false){
+		if($this->tile->isClosed() or $this->player->isClosed()){
 			$this->flagForDespawn();
 			
-			if($this->tile !== null and $this->tile->isClosed() == false){
+			if($this->tile->isClosed() == false){
 				$this->tile->in_use = false;
 			}
-			if($this->itemEntity !== null){
-				$this->itemEntity->flagForDespawn();
+			
+			if($this->item_eid !== -1){
+				$pk = new RemoveEntityPacket;
+				$pk->entityUniqueId = $this->item_eid;
+				
+				$this->getLevel()->addChunkPacket($this->x >> 4, $this->z >> 4, $pk);
 			}
+			
 			if($this->ftp !== null){
 				$this->ftp->setInvisible(true);
 				
@@ -135,8 +142,6 @@ class MysterySkull extends Entity{
 		if($this->max_y > 0 and $this->stay_time == 0){
 			$this->motion->y = 0.05;
 			$this->max_y -= 0.1;
-			
-			$this->getLevel()->addParticle(new LavaParticle($this->asVector3()));
 		}else{
 			if($this->motion->y > 0){
 				$this->motion->y = 0;
@@ -144,6 +149,8 @@ class MysterySkull extends Entity{
 			
 			$this->stay_time++;
 		}
+		
+		$this->getLevel()->addParticle(new LavaParticle($this->asVector3()));
 		
 		if($this->stay_time >= 60){
 			$this->motion->y = -0.05;
@@ -154,8 +161,12 @@ class MysterySkull extends Entity{
 				$this->mysterybox->displayAnimation($this->tile, false);
 				
 				$this->ftp->setInvisible(true);
-				if($this->itemEntity !== null){
-					$this->itemEntity->flagForDespawn();
+				
+				if($this->item_eid !== -1){
+					$pk = new RemoveEntityPacket;
+					$pk->entityUniqueId = $this->item_eid;
+				
+					$this->getLevel()->addChunkPacket($this->x >> 4, $this->z >> 4, $pk);
 				}
 				
 				foreach($this->ftp->encode() as $pk){
@@ -174,7 +185,14 @@ class MysterySkull extends Entity{
 			$this->getLevel()->addParticle($this->ftp);
 			$this->getLevel()->broadcastLevelSoundEvent($this->asVector3(), LevelSoundEventPacket::SOUND_PORTAL_TRAVEL);
 			
-			$this->itemEntity = $this->getLevel()->dropItem($this->ftp->asVector3(), $data[0], new Vector3(0, 0, 0), 8000);
+			$this->item_eid = Entity::$entityCount++;
+			
+			$pk  = new AddItemEntityPacket;
+			$pk->entityRuntimeId = $this->item_eid;
+			$pk->item = $data[0];
+			$pk->position = $this->ftp->asVector3();
+			
+			$this->getLevel()->addChunkPacket($this->x >> 4, $this->z >> 4, $pk);
 		}
 		
 		if($this->yaw > 360){
@@ -192,5 +210,17 @@ class MysterySkull extends Entity{
 	
 	public function canSaveWithChunk() : bool{
 		return false;
+	}
+	
+	/**
+	 * @param void
+	 */
+	
+	public function close() : void{
+		parent::close();
+		
+		if(is_null($this->tile) == false){
+			$this->tile->in_use = false;
+		}
 	}
 }
