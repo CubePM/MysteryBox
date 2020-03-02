@@ -25,17 +25,17 @@ use pocketmine\entity\Entity;
 
 use pocketmine\math\Vector3;
 
-use pocketmine\level\particle\LavaParticle;
+use pocketmine\level\particle\HeartParticle;
 use pocketmine\level\particle\HugeExplodeSeedParticle;
 use pocketmine\level\particle\FloatingTextParticle;
 
 use pocketmine\event\entity\EntityDamageEvent;
 
-use pocketmine\level\sound\FizzSound;
+use pocketmine\level\sound\PopSound;
 
 use pocketmine\network\mcpe\protocol\LevelSoundEventPacket;
-use pocketmine\network\mcpe\protocol\AddItemEntityPacket;
-use pocketmine\network\mcpe\protocol\RemoveEntityPacket;
+use pocketmine\network\mcpe\protocol\AddItemActorPacket;
+use pocketmine\network\mcpe\protocol\RemoveActorPacket;
 
 use mysterybox\tile\MysteryTile;
 
@@ -120,7 +120,7 @@ class MysterySkull extends Entity{
 			}
 			
 			if($this->item_eid !== -1){
-				$pk = new RemoveEntityPacket;
+				$pk = new RemoveActorPacket;
 				$pk->entityUniqueId = $this->item_eid;
 				
 				$this->getLevel()->addChunkPacket($this->x >> 4, $this->z >> 4, $pk);
@@ -137,7 +137,7 @@ class MysterySkull extends Entity{
 			return true;
 		}
 		
-		$this->getLevel()->addSound(new FizzSound($this->asVector3()));
+		$this->getLevel()->addSound(new PopSound($this->asVector3()));
 		
 		if($this->max_y > 0 and $this->stay_time == 0){
 			$this->motion->y = 0.05;
@@ -150,7 +150,7 @@ class MysterySkull extends Entity{
 			$this->stay_time++;
 		}
 		
-		$this->getLevel()->addParticle(new LavaParticle($this->asVector3()));
+		$this->getLevel()->addParticle(new HeartParticle($this->asVector3()));
 		
 		if($this->stay_time >= 60){
 			$this->motion->y = -0.05;
@@ -163,7 +163,7 @@ class MysterySkull extends Entity{
 				$this->ftp->setInvisible(true);
 				
 				if($this->item_eid !== -1){
-					$pk = new RemoveEntityPacket;
+					$pk = new RemoveActorPacket;
 					$pk->entityUniqueId = $this->item_eid;
 				
 					$this->getLevel()->addChunkPacket($this->x >> 4, $this->z >> 4, $pk);
@@ -183,11 +183,11 @@ class MysterySkull extends Entity{
 			$this->ftp = new FloatingTextParticle($this->tile->add(0.5, 1, 0.5), $data[1]);
 			
 			$this->getLevel()->addParticle($this->ftp);
-			$this->getLevel()->broadcastLevelSoundEvent($this->asVector3(), LevelSoundEventPacket::SOUND_PORTAL_TRAVEL);
+			$this->getLevel()->broadcastLevelSoundEvent($this->asVector3(), LevelSoundEventPacket::SOUND_BLOCK_BELL_HIT);
 			
 			$this->item_eid = Entity::$entityCount++;
 			
-			$pk  = new AddItemEntityPacket;
+			$pk  = new AddItemActorPacket;
 			$pk->entityRuntimeId = $this->item_eid;
 			$pk->item = $data[0];
 			$pk->position = $this->ftp->asVector3();
