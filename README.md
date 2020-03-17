@@ -1,3 +1,6 @@
+### NOTE
+This project was moved to [CubeBox](https://github.com/CubePM/CubeBox)
+
 # Mystery Box
 
 An advanced PocketMine-MP plugin to implement crates on your server.
